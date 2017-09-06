@@ -1,0 +1,16 @@
+version: "2"
+
+services:
+  sibcore:
+    build:
+      context: ./composes-services/sibcore
+    environment:
+      - NETWORK=livenet
+    ports:
+      - 3001:3001
+      - 1945:1945
+    volumes:
+      - "/var/www/sibcore-docker/data:/home/sibcore/data"
+
+volumes:
+  /var/www/sibcore-docker/data:
