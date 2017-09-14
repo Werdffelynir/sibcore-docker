@@ -10,8 +10,8 @@
   "servicesConfig": {
     "bitcoind": {
       "spawn": {
-        "datadir": "./data",
-        "exec": "/usr/local/lib/node_modules/bitcore/node_modules/bitcore-node/bin/bitcoind"
+        "datadir": "~/data",
+        "exec": "/home/sibcore/.nvm/versions/node/v4.8.4/lib/node_modules/bitcore/bin/bitcored"
       }
     }
   }

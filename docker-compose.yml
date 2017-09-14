@@ -10,7 +10,5 @@ services:
       - 3001:3001
       - 1945:1945
     volumes:
-      - "/var/www/sibcore-docker/data:/home/sibcore/data"
+      - "./apps/bitcore:/home/sibcore/.nvm/versions/node/v4.8.4/lib/node_modules/bitcore/"
 
-volumes:
-  /var/www/sibcore-docker/data:
