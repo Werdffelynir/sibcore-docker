@@ -1,15 +1,15 @@
 ###################################################
 #
 ###################################################
-FROM node:8
+FROM sib-base:latest
+USER root
+ADD start.sh ${HOME}/start.sh
+RUN chown sibcore:sibcore ${HOME}/start.sh &&\
+    chmod +x ${HOME}/start.sh
 
-# Create livenet fullnode
-###################################################
-# WORKDIR ${HOME}
-# RUN . ${NVM_DIR}/nvm.sh &&\
-#     sibcore create nodelivenet
-#
-# ADD ./networks/livenet/bitcore-node.json ${HOME}/nodelivenet/bitcore-node.json
-# ADD ./networks/livenet/package.json ${HOME}/nodelivenet/package.json
-# ADD ./networks/livenet/bitcoin.conf ${HOME}/data/bitcoin.conf
-# ADD ./networks/livenet/start.sh ${HOME}/start.sh
+USER sibcore
+ENV PATH_NODE "/home/sibcore/node"
+ENV PATH "/home/sibcore/.nvm/versions/node/v4.8.4/bin:/usr/bin/env"
+WORKDIR ${PATH_NODE}
+VOLUME ${PATH_NODE}
+ENTRYPOINT ${HOME}/start.sh

@@ -1,0 +1,48 @@
+###################################################
+#
+###################################################
+FROM ubuntu:16.04
+
+RUN apt-get update
+RUN apt-get -y install g++ make python git curl tar nano mc findutils libzmq3-dev build-essential
+
+RUN groupadd sibcore
+RUN useradd sibcore -m -s /bin/bash -g sibcore
+
+ENV HOME /home/sibcore
+ENV NODE_VERSION 4.8.4
+ENV NVM_DIR ${HOME}/.nvm
+
+#RUN ["mkdir", "-p", "/home/sibcore/.nvm/versions/node/v4.8.4/lib/node_modules/bitcore"]
+#RUN mkdir -p /home/sibcore/.nvm
+#RUN chown 777 -R /home/sibcore/.nvm
+
+USER sibcore
+WORKDIR /home/sibcore
+
+RUN curl https://raw.githubusercontent.com/creationix/nvm/v0.33.1/install.sh | bash
+
+#VOLUME /home/sibcore/.nvm/versions/node/v4.8.4/lib/node_modules/bitcore
+
+RUN . ${NVM_DIR}/nvm.sh &&\
+    nvm install $NODE_VERSION &&\
+    nvm alias default $NODE_VERSION
+
+#ENTRYPOINT ["/home/sibcore/.nvm/versions/node/v4.8.4/bin/npm", "install", "git+https://git@github.com/Werdffelynir/bitcore.git", "-g"]
+
+
+
+
+# ENTRYPOINT ["curl", "https://raw.githubusercontent.com/creationix/nvm/v0.33.1/install.sh", "|", "bash"]
+# ENTRYPOINT [".", "/home/sibcore/.nvm/nvm.sh"]
+#ENTRYPOINT ["nvm", "install", "4.8.4"]
+#ENTRYPOINT ["nvm", "alias", "default", "4.8.4"]
+#ENTRYPOINT ["nvm", "install", "git+https://git@github.com/Werdffelynir/bitcore.git", "-g"]
+
+# RUN . ${NVM_DIR}/nvm.sh &&\
+#     nvm install $NODE_VERSION &&\
+#     nvm alias default $NODE_VERSION &&\
+#     npm install git+https://git@github.com/Werdffelynir/bitcore.git -g
+
+
+
