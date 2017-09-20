@@ -7,5 +7,6 @@ gen
 
 # Project data
 devinfo
-data/*
-apps/*
+src/bitcore/*
+src/livenet/*
+src/testnet/*

@@ -9,12 +9,13 @@ RUN apt-get -y install g++ make python git curl tar nano mc findutils libzmq3-de
 RUN groupadd sibcore
 RUN useradd sibcore -m -s /bin/bash -g sibcore
 
-ENV HOME /home/sibcore
-ENV NODE_VERSION 4.8.4
-ENV NVM_DIR ${HOME}/.nvm
+ENV HOME "/home/sibcore"
+ENV NODE_VERSION "4.8.4"
+ENV NVM_DIR "/home/sibcore/.nvm"
 
 USER sibcore
-WORKDIR /home/sibcore
+
+WORKDIR ${HOME}
 
 RUN curl https://raw.githubusercontent.com/creationix/nvm/v0.33.1/install.sh | bash
 
