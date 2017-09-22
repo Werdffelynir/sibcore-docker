@@ -15,6 +15,8 @@ ENV NVM_DIR "/home/sibcore/.nvm"
 
 USER sibcore
 
+WORKDIR ${HOME}
+
 RUN curl https://raw.githubusercontent.com/creationix/nvm/v0.33.1/install.sh | bash
 
 RUN . ${NVM_DIR}/nvm.sh &&\
@@ -25,13 +27,10 @@ ENV PATH ${PATH}":/home/sibcore/.nvm/versions/node/v${NODE_VERSION}/bin"
 
 RUN npm install -g grunt-cli
 RUN npm install -g cordova
-#RUN npm install -g node-sass
-#RUN npm install -g coffee-script
+RUN npm install -g node-sass
+RUN npm install -g coffee-script
 RUN npm install -g bower
-#RUN npm install -g fsevents
-#RUN npm install -g ionic
-
-# npm update --no-optional &&
+RUN npm update --no-optional && npm install -g ionic
 
 WORKDIR ${HOME}/copay
 VOLUME ${HOME}/copay
