@@ -1,12 +1,52 @@
 #!/bin/bash
 printf "\n\e[92m  T E S T  S T A R T  \x1b[0m\n"
 
-#cd ./copay
+npm start
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#npm run build:www
+#ionic serve --nolivereload --nogulp -s --address 0.0.0.0
+
+#printf "\n\e[92mnpm-debug.log  \x1b[0m\n"
+#tail -n 50 ${HOME}/copay/npm-debug.log
+
+#tail -n 50 ${HOME}/.ionic/daemon.log
+#cd ./copay
 #ionic -v
 #ls -la /home/sibcore
 #ls -la /home/sibcore/.ionic
-npm start
+#npm start
 #ls -la /home/sibcore/.ionic/
 
 

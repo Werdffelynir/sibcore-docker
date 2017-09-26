@@ -33,7 +33,7 @@ ENV PATH ${PATH}":${HOME}/.nvm/versions/node/v${NODE_VERSION}/bin"
 RUN npm install -g cordova@4.2.0
 RUN npm run apply:copay
 
-EXPOSE 8100 35729
+EXPOSE 8100
 
 VOLUME ${HOME}/copay
 
