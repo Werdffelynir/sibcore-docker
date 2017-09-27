@@ -1,105 +1,90 @@
-###################################################
-# Copay
-###################################################
-FROM ubuntu:16.04
+FROM debian:jessie
 
+ENV DEBIAN_FRONTEND=noninteractive \
+    ANDROID_HOME=/opt/android-sdk-linux \
+    NPM_VERSION=4.4.4 \
+    IONIC_VERSION=3.3.0 \
+    CORDOVA_VERSION=6.5.0 \
+    YARN_VERSION=0.24.6 \
+    DBUS_SESSION_BUS_ADDRESS=/dev/null \
+    SOURCE_DIR=/copay
+
+# Install basics
 RUN apt-get update
-RUN apt-get -y install g++ make python git curl tar nano mc build-essential
+RUN apt-get install -y git wget curl unzip ruby build-essential
+RUN curl -sL https://deb.nodesource.com/setup_6.x | bash -
+RUN apt-get update
+RUN apt-get install -y nodejs
 
-RUN groupadd sibcore
-RUN useradd sibcore -m -s /bin/bash -g sibcore
+RUN npm install -g cordova@${CORDOVA_VERSION}
+RUN npm install -g ionic@${IONIC_VERSION}
+RUN npm install -g yarn@${YARN_VERSION}
+RUN npm cache clear
 
-ENV HOME "/home/sibcore"
-ENV NODE_VERSION "6.7.0"
-ENV NVM_DIR "/home/sibcore/.nvm"
+RUN apt-get install ruby-dev -y
+RUN gem install sass scss_lint
 
-RUN git clone https://github.com/Werdffelynir/copay.git ${HOME}/copay &&\
-    chown sibcore:sibcore -R ${HOME}/copay &&\
-    chmod 755 -R  ${HOME}/copay
+RUN wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb &&\
+    dpkg --unpack google-chrome-stable_current_amd64.deb &&\
+    apt-get install -f -y &&\
+    apt-get clean &&\
+    rm google-chrome-stable_current_amd64.deb
 
-USER sibcore
+RUN mkdir ${SOURCE_DIR}
+RUN mkdir -p /root/.cache/yarn/
 
-RUN curl https://raw.githubusercontent.com/creationix/nvm/v0.33.1/install.sh | bash
+# Font libraries
+RUN apt-get -qqy install fonts-ipafont-gothic xfonts-100dpi xfonts-75dpi xfonts-cyrillic xfonts-scalable libfreetype6 libfontconfig
 
-WORKDIR ${HOME}/copay
+# install python-software-properties (you can do add-apt-repository)
+RUN apt-get update && apt-get install -y -q python-software-properties software-properties-common
+RUN add-apt-repository "deb http://ppa.launchpad.net/webupd8team/java/ubuntu xenial main" -y
+RUN echo oracle-java8-installer shared/accepted-oracle-license-v1-1 select true | /usr/bin/debconf-set-selections
+RUN apt-get update && apt-get -y install oracle-java8-installer
 
-RUN . ${NVM_DIR}/nvm.sh &&\
-    nvm install $NODE_VERSION &&\
-    nvm alias default $NODE_VERSION &&\
-    npm install -g bower grunt-cli ionic@1
+# System libs for android enviroment
+RUN echo ANDROID_HOME="${ANDROID_HOME}" >> /etc/environment
+RUN dpkg --add-architecture i386
+RUN apt-get update
+RUN apt-get install -y --force-yes expect ant wget libc6-i386 lib32stdc++6 lib32gcc1 lib32ncurses5 lib32z1 qemu-kvm kmod
+RUN apt-get clean
+RUN apt-get autoclean
+RUN rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-ENV PATH ${PATH}":${HOME}/.nvm/versions/node/v${NODE_VERSION}/bin"
+# Install Android Tools
+RUN mkdir /opt/android-sdk-linux
+RUN cd /opt/android-sdk-linux &&\
+    wget --output-document=android-tools-sdk.zip --quiet https://dl.google.com/android/repository/tools_r25.2.3-linux.zip &&\
+    unzip -q android-tools-sdk.zip &&\
+    rm -f android-tools-sdk.zip
+RUN chown -R root. /opt
 
-RUN npm install -g cordova@4.2.0
-RUN npm run apply:copay
+# Setup environment
+ENV PATH ${PATH}:${ANDROID_HOME}/tools:${ANDROID_HOME}/platform-tools
+
+# Install Android SDK
+RUN yes Y | ${ANDROID_HOME}/tools/bin/sdkmanager "build-tools;25.0.2" "platforms;android-25" "platform-tools"
+RUN cordova telemetry off
+
+# ReInstall NPM
+RUN curl -L https://npmjs.org/install.sh | npm_install=${NPM_VERSION} bash
+
+# Needed for Copay
+RUN mkdir -p /root/.ionic && touch /root/.ionic/daemon.log
+
+# Install Gradle builder
+RUN wget https://services.gradle.org/distributions/gradle-3.4.1-bin.zip &&\
+    mkdir /opt/gradle &&\
+    unzip -d /opt/gradle gradle-3.4.1-bin.zip
+
+ENV PATH ${PATH}:/opt/gradle/gradle-3.4.1/bin
+
+
+
+WORKDIR ${SOURCE_DIR}
 
 EXPOSE 8100 35729
 
-VOLUME ${HOME}/copay
-
-RUN ls -la ${HOME}
-RUN mkdir ${HOME}/.ionic && touch ${HOME}/.ionic/daemon.log && chown sibcore:sibcore -R ${HOME}/.ionic
-#USER root
-#ADD ./.ionic/daemon.log ${HOME}/.ionic/daemon.log
-#RUN  chown sibcore:sibcore -R ${HOME}/.ionic/daemon.log && chmod 777 -R ${HOME}/.ionic/daemon.log
-#USER sibcore
-
-ADD start.sh ${HOME}/start.sh
-CMD bash ${HOME}/start.sh
+CMD ["npm", "start"]
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-####################################################
-## Copay
-####################################################
-#FROM agileek/ionic-framework
-#
-#RUN apt-get update
-#RUN apt-get -y install g++ make python git curl tar nano mc build-essential
-#
-#RUN groupadd sibcore
-#RUN useradd sibcore -m -s /bin/bash -g sibcore
-#
-#ENV HOME "/home/sibcore"
-#ENV NODE_VERSION "6.7.0"
-#ENV NVM_DIR "/home/sibcore/.nvm"
-#
-#RUN git clone https://github.com/Werdffelynir/copay.git ${HOME}/copay &&\
-#    chown sibcore:sibcore -R ${HOME}/copay &&\
-#    chmod 755 -R  ${HOME}/copay
-#
-#USER sibcore
-#
-#RUN curl https://raw.githubusercontent.com/creationix/nvm/v0.33.1/install.sh | bash
-#
-#WORKDIR ${HOME}/copay
-#
-#RUN . ${NVM_DIR}/nvm.sh &&\
-#    nvm install $NODE_VERSION &&\
-#    nvm alias default $NODE_VERSION &&\
-#    npm install -g bower grunt-cli &&\
-#    npm run apply:copay
-#
-#
-#ENV PATH ${PATH}":${HOME}/.nvm/versions/node/v${NODE_VERSION}/bin"
-#
-#EXPOSE 8100
-#
-#VOLUME ${HOME}/copay
-#
-#ADD start.sh ${HOME}/start.sh
-#CMD bash ${HOME}/start.sh

@@ -1,15 +1,7 @@
 #!/bin/sh
 
-path_src_copay="/var/app/sibcore-docker/src/copay"
-path_src_container="/copay"
+COPAY_HOME="/var/app/sibcore-docker/src/copay"
+COPAY_CONTAINER_HOME="/copay"
 
 # Step
-docker run -p 3000:3000 \
-    -v ${path_src_copay}:${path_src_container} --rm copay:latest
-
-#--name 'copay-server'
-#chromium-browser --app http://CONTAINER_NETWORK_IP:3000
-
-
-# docker run -p 3000:3000 -v /var/app/sibcore-docker/src/copay:/copay copay:latest
-# /copay/node_modules/.bin/npm
+docker run --rm -ti -v ${COPAY_HOME}:${COPAY_CONTAINER_HOME}:rw copay npm run watch

@@ -1,10 +1,12 @@
 #!/bin/sh
 
-path_src_node="/var/app/sibcore-docker/src/testnet"
-path_src_bitcore="/var/app/sibcore-docker/src/bitcore"
-path_src_container="/home/sibcore/.nvm/versions/node/v4.8.4/lib/node_modules/bitcore"
+NODE_HOME="/var/app/sibcore-docker/src/testnet"
+BITCORE_HOME="/var/app/sibcore-docker/src/bitcore"
+NODE_CONTAINER_HOME="/home/sibcore/node"
+BITCORE_CONTAINER_HOME="/home/sibcore/.nvm/versions/node/v4.8.4/lib/node_modules/bitcore"
 
 # Step
-docker run -it -P -v "$path_src_node:/home/sibcore/node" \
- -v "$path_src_bitcore:$path_src_container" \
- testnet:latest
+docker run --rm -it -P \
+    -v ${NODE_HOME}:${NODE_CONTAINER_HOME} \
+    -v ${BITCORE_HOME}:${BITCORE_CONTAINER_HOME} \
+    livenet:latest

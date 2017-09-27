@@ -1,11 +1,10 @@
 #!/bin/sh
 
-path_src_bws="/var/app/sibcore-docker/src/bitcore-wallet-service"
-path_src_container="/home/sibcore/bitcore-wallet-service"
+BWS_HOME="/var/app/sibcore-docker/src/bitcore-wallet-service"
+BWS_CONTAINER_HOME="/home/sibcore/bitcore-wallet-service"
 
 # Step
-docker run -p 27017:27017 --name db mongo
+docker run --rm -p 27017:27017 --name db mongo
 
 # Step
-docker run -p 3232:3232 --link db:db \
-    -v ${path_src_bws}:${path_src_container} --name bws bws:latest
+docker run --rm -p 3232:3232 --link db:db -v ${BWS_HOME}:${BWS_CONTAINER_HOME} --name bws bws:latest
