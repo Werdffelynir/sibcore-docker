@@ -62,8 +62,18 @@ RUN chown -R root. /opt
 # Setup environment
 ENV PATH ${PATH}:${ANDROID_HOME}/tools:${ANDROID_HOME}/platform-tools
 
-# Install Android SDK
-RUN yes Y | ${ANDROID_HOME}/tools/bin/sdkmanager "build-tools;25.0.2" "platforms;android-25" "platform-tools"
+#RUN npm install gulp gulp-sass -g
+RUN mkdir ${ANDROID_HOME}/licenses
+RUN echo 8933bad161af4178b1185d1a37fbf41ea5269c55 > ${ANDROID_HOME}/licenses/android-sdk-license
+RUN echo 84831b9409646a918e30573bab4c9c91346d8abd > ${ANDROID_HOME}/licenses/android-sdk-preview-license
+
+# Install and Update Android SDK using sdkmanager
+RUN yes Y | ${ANDROID_HOME}/tools/bin/sdkmanager "tools" "platform-tools"
+RUN yes Y | ${ANDROID_HOME}/tools/bin/sdkmanager "build-tools;25.0.3" "build-tools;25.0.2"
+RUN yes Y | ${ANDROID_HOME}/tools/bin/sdkmanager "platforms;android-26" "platforms;android-25" "platforms;android-24" "platforms;android-23"
+RUN yes Y | ${ANDROID_HOME}/tools/bin/sdkmanager "extras;android;m2repository" "extras;google;m2repository"
+RUN yes Y | ${ANDROID_HOME}/tools/bin/sdkmanager "extras;m2repository;com;android;support;constraint;constraint-layout;1.0.2"
+RUN yes Y | ${ANDROID_HOME}/tools/bin/sdkmanager "extras;m2repository;com;android;support;constraint;constraint-layout-solver;1.0.2"
 RUN cordova telemetry off
 
 # ReInstall NPM
@@ -72,19 +82,19 @@ RUN curl -L https://npmjs.org/install.sh | npm_install=${NPM_VERSION} bash
 # Needed for Copay
 RUN mkdir -p /root/.ionic && touch /root/.ionic/daemon.log
 
-# Install Gradle builder
+# Install Gradle builder, or gradle-3.3-all.zip
 RUN wget https://services.gradle.org/distributions/gradle-3.4.1-bin.zip &&\
     mkdir /opt/gradle &&\
     unzip -d /opt/gradle gradle-3.4.1-bin.zip
 
 ENV PATH ${PATH}:/opt/gradle/gradle-3.4.1/bin
 
-
-
 WORKDIR ${SOURCE_DIR}
 
 EXPOSE 8100 35729
 
-CMD ["npm", "start"]
+#CMD ["npm", "start"]
+CMD npm run clean-all && npm run apply:copay && npm run --force final:android
+
 
 
