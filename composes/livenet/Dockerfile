@@ -17,5 +17,7 @@ ENV PATH ${PATH}":/home/sibcore/.nvm/versions/node/v4.8.4/bin"
 WORKDIR ${PATH_NODE}
 VOLUME ${PATH_NODE}
 
+EXPOSE 1945 1944 8333 8332 3001
+
 CMD ${HOME}/start.sh
 

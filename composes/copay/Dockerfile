@@ -89,12 +89,21 @@ RUN wget https://services.gradle.org/distributions/gradle-3.4.1-bin.zip &&\
 
 ENV PATH ${PATH}:/opt/gradle/gradle-3.4.1/bin
 
+# Install Bower
+RUN npm install bower -g
+
 WORKDIR ${SOURCE_DIR}
 
 EXPOSE 8100 35729
 
-#CMD ["npm", "start"]
-CMD npm run clean-all && npm run apply:copay && npm run --force final:android
+CMD npm run clean-all && bower install --allow-root && npm run apply:copay && npm start
 
+# && bower install --allow-root
+#CMD npm run clean-all && npm run apply:copay && npm start
+#CMD npm run clean-all && npm run apply:copay && npm run --force final:android
+ # && bower install --allow-root
+
+#CMD npm start
+#CMD npm run --force final:android
 
 

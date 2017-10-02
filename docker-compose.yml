@@ -1,9 +1,59 @@
 version: "2"
 
 services:
+
   sibcore:
     build:
-      context: ./composes-services/sibcore
+      context: ./composes/sibcore
+    environment:
+      - NETWORK=livenet
+    ports:
+      - 3001:3001
+      - 1945:1945
+    volumes:
+      - "./apps/bitcore:/home/sibcore/.nvm/versions/node/v4.8.4/lib/node_modules/bitcore/"
+
+  livenet:
+    build:
+      context: ./composes/livenet
+    environment:
+      - NETWORK=livenet
+    ports:
+      - 3001:3001
+      - 1945:1945
+    volumes:
+      - "./apps/bitcore:/home/sibcore/.nvm/versions/node/v4.8.4/lib/node_modules/bitcore/"
+
+  testnet:
+    build:
+      context: ./composes/testnet
+    environment:
+      - NETWORK=livenet
+    ports:
+      - 3001:3001
+      - 1945:1945
+    volumes:
+      - "./apps/bitcore:/home/sibcore/.nvm/versions/node/v4.8.4/lib/node_modules/bitcore/"
+
+  db:
+    image: mongo
+    ports:
+      - "27017"
+    volumes:
+      - "/data/"
+
+  app:
+    build: ./composes/bws
+    ports:
+      - "3232:3232"
+    volumes_from:
+      - db
+    links:
+      - db
+
+  copay:
+    build:
+      context: ./composes/copay
     environment:
       - NETWORK=livenet
     ports:

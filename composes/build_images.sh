@@ -59,5 +59,9 @@ then
     printf "\n\e[92m - Build docker image for bitcore wallet service: \x1b[0m\n"
     docker build --rm --no-cache -t 'bws' ${COMPOSES_HOME}/bws
 
+    # Step
+    printf "\n\e[92m - Build docker image for Copay: \x1b[0m\n"
+    docker build --rm --no-cache -t 'copay' ${COMPOSES_HOME}/copay
+
 fi
 
