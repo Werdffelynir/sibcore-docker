@@ -8,4 +8,5 @@ gen
 # Project data
 devinfo
 src/*
-src_origin
+volumes/*
+*/*/volumes
