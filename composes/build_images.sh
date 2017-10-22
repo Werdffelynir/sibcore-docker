@@ -23,11 +23,9 @@ then
     printf "\n\e[92m - Clone bitcore from github: \x1b[0m\n"
     git clone https://github.com/Werdffelynir/bitcore.git ${BITCORE_HOME}
 
-    # Step
     printf "\n\e[92m - Bitcore installing: \x1b[0m\n"
     cd ${BITCORE_HOME} && npm install
 
-    # Step
     printf "\n\e[92m - Build sibcore docker image: \x1b[0m\n"
     docker build --rm --no-cache -t 'sibcore' ${COMPOSES_HOME}/sibcore
 
@@ -35,7 +33,6 @@ then
     printf "\n\e[92m - Create source of sibcore node livenet: \x1b[0m\n"
     ${BITCORE_HOME}/bin/bitcore create ${BITCORE_NODE_LIVENET_HOME}
 
-    # Step
     printf "\n\e[92m - Build docker image for sibcore node on livenet: \x1b[0m\n"
     docker build --rm --no-cache -t 'livenet' ${COMPOSES_HOME}/livenet
 
@@ -43,7 +40,6 @@ then
     printf "\n\e[92m - Create source of sibcore node testnet: \x1b[0m\n"
     ${BITCORE_HOME}/bin/bitcore create ${BITCORE_NODE_TESTNET_HOME} --testnet
 
-    # Step
     printf "\n\e[92m - Build docker image for sibcore node on testnet: \x1b[0m\n"
     docker build --rm --no-cache -t 'testnet' ${COMPOSES_HOME}/testnet
 
@@ -51,15 +47,13 @@ then
     printf "\n\e[92m - Clone Bitcore Wallet Service source from github: \x1b[0m\n"
     git clone https://github.com/Werdffelynir/bitcore-wallet-service.git ${BWS_HOME}
 
-    # Step
     printf "\n\e[92m - Bitcore Wallet Service installing: \x1b[0m\n"
     cd ${BWS_HOME} && npm install
 
-    # Step
     printf "\n\e[92m - Build docker image for bitcore wallet service: \x1b[0m\n"
     docker build --rm --no-cache -t 'bws' ${COMPOSES_HOME}/bws
 
-    # Step
+    # Step Copay
     printf "\n\e[92m - Build docker image for Copay: \x1b[0m\n"
     docker build --rm --no-cache -t 'copay' ${COMPOSES_HOME}/copay
 

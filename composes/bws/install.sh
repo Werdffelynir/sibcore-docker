@@ -1,8 +1,7 @@
 #!/bin/sh
 
-SCRIPT_ROOT=$(dirname "$(realpath -s $0)")
-LOCAL_SRC_PATH="$SCRIPT_ROOT/volumes/livenet"
-BITCORE_HOME="$(dirname "$SCRIPT_ROOT")/sibcore/volumes/bitcore"
+BITCORE_PATH="/var/app/sibcore-docker/src/bitcore"
+LOCAL_SRC_PATH="$(dirname "$(realpath -s $0)")/volumes/livenet"
 
 if [ `node -v` != "v4.8.4" ]
 then
@@ -19,7 +18,7 @@ then
 
     # Step Livenet
     printf "\n\e[92m - Create source of livenet: \x1b[0m\n"
-    ${BITCORE_HOME}/bin/bitcore create ${LOCAL_SRC_PATH}
+    ${BITCORE_PATH}/bin/bitcore create ${LOCAL_SRC_PATH}
 
     # Step
     printf "\n\e[92m - Build docker image for livenet: \x1b[0m\n"
