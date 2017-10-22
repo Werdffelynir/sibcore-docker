@@ -7,6 +7,16 @@ BITCORE_HOME="$(dirname "$SCRIPT_ROOT")/sibcore/volumes/bitcore"
 NODE_CONTAINER_HOME="/home/sibcore/node"
 BITCORE_CONTAINER_HOME="/home/sibcore/.nvm/versions/node/v4.8.4/lib/node_modules/bitcore"
 
+if [ ! -d ${NODE_HOME}/node_modules/insight-api ]
+then
+    export NVM_DIR="$HOME/.nvm"
+    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+    [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+
+    nvm use v4.8.4
+    cd ${NODE_HOME} && npm install
+fi
+
 # Step
 docker run --rm -it -p 1945:1945 -p 1944:1944 -p 3001:3001 \
     -v ${NODE_HOME}:${NODE_CONTAINER_HOME} \

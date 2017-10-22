@@ -1,21 +1,15 @@
 ###################################################
 # Create Bitcore Wallet Service docker images
 ###################################################
-FROM sibcore:latest
+FROM sibcore:1
 
 USER root
-
-ADD start.sh ${HOME}/start.sh
-RUN chown sibcore:sibcore ${HOME}/start.sh &&\
-    chmod +x ${HOME}/start.sh
 
 ENV PATH_BWS "/home/sibcore/bitcore-wallet-service"
 RUN mkdir -p ${PATH_BWS}
 RUN chown sibcore:sibcore -R ${PATH_BWS}
 
 USER sibcore
-
-ENV PATH ${PATH}":/home/sibcore/.nvm/versions/node/v4.8.4/bin:/usr/bin/env"
 
 WORKDIR ${PATH_BWS}
 VOLUME ${PATH_BWS}

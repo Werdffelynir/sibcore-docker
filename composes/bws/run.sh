@@ -1,15 +1,8 @@
 #!/bin/sh
 
-SCRIPT_ROOT=$(dirname "$(realpath -s $0)")
-NODE_HOME="$SCRIPT_ROOT/volumes/livenet"
-BITCORE_HOME="$(dirname "$SCRIPT_ROOT")/sibcore/volumes/bitcore"
 
-NODE_CONTAINER_HOME="/home/sibcore/node"
-BITCORE_CONTAINER_HOME="/home/sibcore/.nvm/versions/node/v4.8.4/lib/node_modules/bitcore"
+LOCAL_SRC_PATH="$(dirname "$(realpath -s $0)")/volumes/bitcore-wallet-service"
+BWS_CONTAINER_HOME="/home/sibcore/bitcore-wallet-service"
 
 # Step
-docker run --rm -it -p 1945:1945 -p 1944:1944 -p 3001:3001 \
-    -v ${NODE_HOME}:${NODE_CONTAINER_HOME} \
-    -v ${BITCORE_HOME}:${BITCORE_CONTAINER_HOME} \
-    livenet:1
-
+docker run --rm -p 3232:3232 --link db:db -v ${LOCAL_SRC_PATH}:${BWS_CONTAINER_HOME} bws:1

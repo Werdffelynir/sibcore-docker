@@ -1,7 +1,7 @@
 #!/bin/sh
 
-BITCORE_PATH="/var/app/sibcore-docker/src/bitcore"
-LOCAL_SRC_PATH="$(dirname "$(realpath -s $0)")/volumes/livenet"
+
+LOCAL_SRC_PATH="$(dirname "$(realpath -s $0)")/volumes/bitcore-wallet-service"
 
 if [ `node -v` != "v4.8.4" ]
 then
@@ -16,12 +16,14 @@ fi
 if [ `node -v` == "v4.8.4" ]
 then
 
-    # Step Livenet
-    printf "\n\e[92m - Create source of livenet: \x1b[0m\n"
-    ${BITCORE_PATH}/bin/bitcore create ${LOCAL_SRC_PATH}
+    # Step Bitcore Wallet Service
+    printf "\n\e[92m - Clone Bitcore Wallet Service source from github: \x1b[0m\n"
+    git clone https://github.com/Werdffelynir/bitcore-wallet-service.git ${LOCAL_SRC_PATH}
 
-    # Step
-    printf "\n\e[92m - Build docker image for livenet: \x1b[0m\n"
-    docker build --rm -t 'livenet:1' .
+    printf "\n\e[92m - Bitcore Wallet Service installing: \x1b[0m\n"
+    cd ${LOCAL_SRC_PATH} && npm install
+
+    printf "\n\e[92m - Build docker image for bitcore wallet service: \x1b[0m\n"
+    cd ../../ && docker build --rm -t 'bws:1' .
 
 fi
