@@ -16,6 +16,9 @@ VOLUME ${PATH_BWS}
 
 EXPOSE 3232 3231 3380 443
 
-CMD npm stop &&\
-    npm start &&\
-    tail -f logs/bws.log
+CMD if test -d ./pids; then npm stop && npm start && tail -f logs/bws.log; else npm start && tail -f logs/bws.log; fi;
+
+#CMD npm stop &&\
+#    npm start &&\
+#    tail -f logs/bws.log
+
