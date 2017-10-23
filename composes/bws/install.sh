@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 
 LOCAL_SRC_PATH="$(dirname "$(realpath -s $0)")/volumes/bitcore-wallet-service"
@@ -22,6 +22,9 @@ then
 
     printf "\n\e[92m - Bitcore Wallet Service installing: \x1b[0m\n"
     cd ${LOCAL_SRC_PATH} && npm install
+
+    printf "\n\e[92m - Change bws config: \x1b[0m\n"
+    cp -f ../../config.js ./config.js
 
     printf "\n\e[92m - Build docker image for bitcore wallet service: \x1b[0m\n"
     cd ../../ && docker build --rm -t 'bws:1' .
