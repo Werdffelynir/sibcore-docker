@@ -5,13 +5,13 @@ FROM sibcore:latest
 
 USER root
 
-ADD sibcoin.conf ${HOME}/.sibcore/sibcoin.conf
-RUN chown sibcore:sibcore ${HOME}/.sibcore/sibcoin.conf &&\
-    chmod +x ${HOME}/.sibcore/sibcoin.conf
+ADD sibcoin.conf ${HOME}/.sibcoin/sibcoin.conf
+RUN chown sibcore:sibcore ${HOME}/.sibcoin/sibcoin.conf &&\
+    chmod +x ${HOME}/.sibcoin/sibcoin.conf
 
-ADD start.sh ${HOME}/start.sh
-RUN chown sibcore:sibcore ${HOME}/start.sh &&\
-    chmod +x ${HOME}/start.sh
+ADD induct.sh ${HOME}/induct.sh
+RUN chown sibcore:sibcore ${HOME}/induct.sh &&\
+    chmod +x ${HOME}/induct.sh
 
 USER sibcore
 
@@ -21,4 +21,4 @@ ENV PATH ${PATH}":/home/sibcore/.nvm/versions/node/v4.8.4/bin"
 WORKDIR ${PATH_NODE}
 VOLUME ${PATH_NODE}
 
-CMD ${HOME}/start.sh
+CMD ${HOME}/induct.sh
