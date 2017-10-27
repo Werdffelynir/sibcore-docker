@@ -19,6 +19,7 @@ fi
 
 # Step
 docker run --rm -it -p 1945:1945 -p 1944:1944 -p 3001:3001 \
+    -p 3232:3232 -p 3231:3231 -p 3380:3380 --link bwsdb:bwsdb \
     -v ${NODE_HOME}:${NODE_CONTAINER_HOME} \
     -v ${BITCORE_HOME}:${BITCORE_CONTAINER_HOME} \
     livenet:1
